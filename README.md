@@ -20,8 +20,6 @@
             - IoC/DI - DI는 유연하게 확장 가능한 객체를 만들어 두고 객체 간의 의존관계는 외부에서 다이나믹하게 설정
             - AOP - 관심사의 분리를 통해서 SW의 모듈성을 향상 / 공통 모듈을 여러 코드에 쉽게 적용 가능
     
-    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/102a1eef-74c2-4a58-a261-a0fd262c0087/6f4c4253-a4c9-4241-976c-f9c7a9d82ec0/Untitled.png)
-    
 
 ### Spring Framework-특징
 -----------------------------------------------------------------------
@@ -41,7 +39,6 @@
 
 - 스프링은 다양한 API에 대한 연동을 지원
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/102a1eef-74c2-4a58-a261-a0fd262c0087/9890f9bf-ae52-48fe-875c-029bdae52ac2/Untitled.png)
 
 ### Spring Framework-Module
 -----------------------------------------------------------------------
