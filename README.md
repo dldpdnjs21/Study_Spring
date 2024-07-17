@@ -1,65 +1,57 @@
 # Study_Spring
 
-
-▶ Statement (java.sql.Statement)
+### Spring Framework
 -----------------------------------------------------------------------
-   Statement에서는 executeQuery("DQL문"),excecuteUpdate("DML문")메소드를 
-     실행하는 시점에 파라미터로 SQL문을 DB에 전달한다.   
-     
-    String sql="insert into person values (1,'"+name+"',13,'학생')";
+1. 엔터프라이즈 급 애플리케이션을 만들기 위한 모든 기능을 종합적으로 제공하는 경량화 된 솔루션
+2. JEE(Java Enterprise Edition)가 제공하는 다수의 기능을 지원하고 있기 때문에, JEE를 대체하는 Framework로 자리잡고 있다.
+3. DI(Dependency Injection)나 AOP(Aspect Oriented Programming)와 같은 기능도 지원
+4. 자바로 Enterprise Appllication을 만들 때 포괄적으로 사용하는 Programming 및 Configuration Model을 제공해주는 Framework로 Application 수준의 인프라 스트럭쳐를 제공
+5. 즉, 개발자가 복잡하고 실수하기 쉬운 Low Level에 신경 쓰지 않고 Business Logic개발에 전념할 수 있도록 해준다.
+- Enterprise System - 서버에서 동작하며 기업의 업무를 처리해주는 System
+
+### Spring Framework-구조
+-----------------------------------------------------------------------
+1. 수많은 플러그인들로 인한 Browser간의 부작용을 막기 위해 개발
+    - Spring 삼각형
+        - Enterprise Application 개발 시 복잡함을 해결하는 Spring의 핵심
+            - POJO - 특정 환경이나 기술에 종속적이지 않은 객체지향 원리에 충실한 자바객체 / 테스트하기 용이하며, 객체지향 설계를 자유롭게 적용할 수 있다.
+            
+            - PSA - 환경과 세부 기술의 변경과 관계없이 일관된 방식으로 기술에 접근할 수 있게 해주는 설계 원칙 / 트랜잭션 추상화, OXM 추상화, 데이터 액세스의 Exception 변환기능 등 기술적인 복잡함은 추상화를 통해 Low Level의 기술 구현 부분과 기술을 사용하는 인터페이스로 분리 (예를 들어 데이터베이스에 관계없이 동일하게 적용 할 수 있는 트랜잭션 처리방식)
+            - IoC/DI - DI는 유연하게 확장 가능한 객체를 만들어 두고 객체 간의 의존관계는 외부에서 다이나믹하게 설정
+            - AOP - 관심사의 분리를 통해서 SW의 모듈성을 향상 / 공통 모듈을 여러 코드에 쉽게 적용 가능
     
-    stmt = conn.createStatement();
-    stmt.executeUpdate(sql);  ==> 사용자가 입력한 데이터를 sql문과 조합해서 최종 sql문 생성
-                                    ==> 생성된 sql문 실행!!
-     
-   
-   장점 : 사용된 SQL문 전체를 명확히 알 수 가 있어서 디버깅이 쉽다.
-   
-   단점 : 조건값이 틀린 많은 수의 SQL문을 반복 실행하게 되는 경우, DB서버에서 모두 새롭게 
-     PARSING되어야 하므로 부하가 생길수 있다.
-     SQL Injection에 취약.
-     -------------
-     
-     SQL문장 주입  ==> 사용자가 입력한 데이터가 SQL문장을 구성할 수 있다!!
-     
-     예)select count(*) cnt from member where id='a' or 1=1 #' and pass='1234'
-                                                               ------------
-                                                           사용자가 입력한 데이터
-                                                          -------------------------
-                                                             sql구문으로 변환          
-                                                             
+    ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/102a1eef-74c2-4a58-a261-a0fd262c0087/6f4c4253-a4c9-4241-976c-f9c7a9d82ec0/Untitled.png)
+    
 
-
-
-▶ PreparedStatement(java.sql.PreparedStatement)
+### Spring Framework-특징
 -----------------------------------------------------------------------
-  PreparedStatement는 커넥션에서 생성하면서 SQL문이 DB에 전송되어진다.
-  Statement클래스를 상속하고 있음  
-  
-  String sql="insert into person values (?,?,?,?)";
-                                         ---
-                                         ? : 바인드 변수
-                                         
-    stmt = conn.prepareStatement(sql);  ===> (데이터가 빠진)sql문 전송!!
-       //?의 수만큼 설정(데이터 설정)!!
-       stmt.setInt   (1,   1);
-       stmt.setString(2,  name);
-       stmt.setInt   (3,   13);
-       stmt.setString(4,  "학생");
-       
-    stmt.executeUpdate(); ==> ※주의: execute()메소드내에 sql기입하면 안됨.
-       ==> 장점1) 작은따옴표, 큰따옴표, 콤마의 조합 그리고 자료형에 신경쓰지 않아도 됨.
-                    장점2) 사용자가 입력한 (sql구문)데이터가 변경될 염려가 없다.
-  
-  
-  
-  장점: bind변수를 사용하여 DB서버에서 파싱된 SQL을 재사용하게 만듬으로, 
-           반복적인 다량의 SQL수행시 성능상 이득이 있다.
-           반복 루프를 통해서 하나의 SQL문에 변수값만 입력하며 반복 실행 할 수 있음.
-         ★   SQL injection예방의 방법이 될 수 있다.     
- 
-  단점:
-     오류발생 시, 변수에 입력되는 값을 알 수 없어서 디버깅이 어렵다.
+- AOP(관점 지향 프로그래밍) 지원
+    - 문제를 바라보는 관점을 기준으로 프로그래밍하는 기법
+    
+- POJO 지원
+    - 특정 인터페이스를 구현하거나 또는 클래스를 상속하지 않는 일반 자바 객체 지원
+    - 스프링 컨테이너에 저장되는 자바 객체는 특정한 인터페이스를 구현 하거나, 클래스 상속 없이도 사용이 가능
+    
+- IoC(제어의 반전)
+    - IoC는 스프링이 갖고 있는 핵심적인 기능이다
+    
+- 스프링은 트랜잭션 처리를 위한 일관된 방법을 제공
+
+- 스프링은 영속성과 관련된 다양한 API를 지원
+
+- 스프링은 다양한 API에 대한 연동을 지원
+
+![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/102a1eef-74c2-4a58-a261-a0fd262c0087/9890f9bf-ae52-48fe-875c-029bdae52ac2/Untitled.png)
+
+### Spring Framework-Module
+-----------------------------------------------------------------------
+| Spring Core | Spring Framework의 핵심 기능을 제공하며, Core 컨테이너의 주요 컴포넌트는 Bean Factory이다. |
+| --- | --- |
+| Spring Context | - Spring을 컨테이너로 만든 것이 Spring core의 BeanFactory라면, Spring을 Framework로 만든 것은 Context module이며, 이 module은 국제화된 메시지, Application 생명주기 이벤트, 유효성 검증 등을 지원함으로써 BeanFactory의 개념을 확장한다. |
+| Spring AOP | 설정 관리 기능을 통해 AOP 기능을 Spring Framework와 직접 통합 시킨다. |
+| Spring ORM | Spring Framework는 여러 ORM Framework에 플러그인 되어, Object Relational 툴(JDO, Hibernate, iBatis)을 제공한다. |
+| Spring Web | Web Context module은 Application Context module 상위에 구현되어, Web 기반 Application에 context를 제공한다. |
+| Spring Web MVC | Spring Framework는 자체적으로 MVC 프레임워크를 제공하고 있으며, 스프링만 사용해도 MVC기반의 웹 어플리케이션을 어렵지 않게 개발이 가능하다. |
 
 
 ▶ JavaBean
