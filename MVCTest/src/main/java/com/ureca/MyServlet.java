@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/sun/ureca")  //맨앞의 '/'는 contextRoot를 의미
+@WebServlet("/sun/ureca2")  //맨앞의 '/'는 contextRoot를 의미
 public class MyServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
