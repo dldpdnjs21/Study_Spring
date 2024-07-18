@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ureca</groupId>
-	<artifactId>HelloBoot</artifactId>
+	<artifactId>HelloSpringBoot2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>HelloBoot</name>
+	<name>HelloSpringBoot2</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
