@@ -12,6 +12,11 @@
       request.setCharacterEncoding("UTF-8");
       String username = request.getParameter("username");      
   %>
-  전달 이름: <%=username %> <%= session.getAttribute("un") %>
+  전달 이름: <%= username %> <%= session.getAttribute("un") %>
+  <hr>
+  k1(pageContext):<%=pageContext.getAttribute("k1") %><br>
+  k2(request):<%=request.getAttribute("k2") %><br>
+  k3(session):<%=session.getAttribute("k3") %><br>
+  k4(application):<%=application.getAttribute("k4") %><br>
 </body>
 </html>
