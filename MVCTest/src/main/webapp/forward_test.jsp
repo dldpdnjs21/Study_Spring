@@ -9,7 +9,11 @@
 <%-- forward_test.jsp --%>
 <body>
    <%
-       request.getRequestDispatcher("end.jsp").forward(request, response);//페이지 이동
+   		pageContext.setAttribute("k1", "홍길동");
+   	  	request.setAttribute("k2", "김주원");
+   	  	session.setAttribute("k3", "길라임");
+   	  	application.setAttribute("k4", "이주원");
+   		request.getRequestDispatcher("end.jsp").forward(request, response);//페이지 이동
    %>
 </body>
 </html>
