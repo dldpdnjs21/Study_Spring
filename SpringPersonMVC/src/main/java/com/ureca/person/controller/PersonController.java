@@ -53,22 +53,25 @@ public class PersonController {
 	
 //	@RequestMapping(value = "/form", method = RequestMethod.POST) //요청URL정의   ==>1.
 	@PostMapping("/form")
-	public String regist(Person person) {//DB입력
+	public String regist(Person person, Model model) {//DB입력
 		System.out.println(">>> POST form");
 		System.out.println("person>>>"+ person);
 		
 		try {
-			service.add(person);
+			service.add(person);//3.
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return "list";  // 5.	
+//		return "redirect:/person/list";  // 5.	
+		return "redirect:list";  // 5.	
 	}
 	
 	@GetMapping("/list") //1.
-	public String list(Model model) {//Model은 영역객체 중에 request와 같음
+	public String list(Model model) { //DB목록출력
+		//Model은 영역객체 중에 request와 같음
 		
 		try {
 			//목록 테이블에 출력할 데이터 얻어오기
@@ -82,6 +85,42 @@ public class PersonController {
 		}
 		
 		return "list";  //5.
+	}
+	
+	@GetMapping("/upform")//  localhost:8080/person/upform?no=3
+	public String upform(@RequestParam("no") int no,
+			             Model model) {//수정폼 보이기
+		
+//		Person person = service.read(no);
+//		model.addAttribute("person", person);
+		
+		try {
+			model.addAttribute("person", service.read(no));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return "upform";
+	}
+	
+	@PostMapping("/upform")
+	public String modify(Person person) {//DB수정 요청
+		try {
+			service.edit(person);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "redirect:list";//수정 결과를 list페이지로 확인
+	}
+	
+	@GetMapping("/delete")//  localhost:8080/person/delete?no=3
+	public String remove(@RequestParam("no") int no) {//DB삭제 요청
+		try {
+			service.remove(no);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "redirect:list";//삭제 결과를 list페이지로 확인
 	}
 	
 	
