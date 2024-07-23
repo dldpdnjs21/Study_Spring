@@ -3,8 +3,11 @@ package com.ureca.person.model.dao;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.ureca.person.dto.Person;
 
+@Mapper
 public interface PersonDAO {
 	
 //	public void insert(String name,int age,String job);
