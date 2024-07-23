@@ -105,7 +105,6 @@ model
      }
      ---> DB access하는 클래스
    
-
 2. View(뷰)
    - 사용자에게 알맞은 화면을 보여주는 역할 수행.
    - JSP, CustomTag
@@ -125,6 +124,145 @@ model
    - Servlet
    - 사용자가 View(GUI)를 통해 입력을 하면 Model(데이터)을
       변경해 주는것.
+
+
+
+=======================================================================
+<<iBatis>>   
+-----------------------------------------------------------------------
+ 1. 호출객체      
+    - SqlMapClient
+    예)  SqlMapClient sqlMap;
+                      sqlMap.insert();
+ 2. DML호출
+    - insert(String id[, Object value])
+      delete(String id[, Object value])
+      update(String id[, Object value])
+ 3. DQL호출      
+    - queryForObject(String id[, Object value])   : 조회결과가 한개 행일때
+    - queryForList(String id[, Object value])     : 조회결과가 두개 이상의 행일때
+                      
+ 4. NameSpace     
+    - 권장
+      예)  <sqlMap></sqlMap>                     : 실행가능
+           <sqlMap namespace="emp"></sqlMap>     : 실행가능
+                    
+ 5. 파라미터처리       
+    - #username#                    
+      예)  <select id="select" parameterClass="String">
+              select userid from userTable
+              where username=#username#
+           </select>
+ 6. 속성
+    - resultClass, parameterClass    
+      예) <select id="아이디" resultClass="자료형" parameterClass="자료형">
+              조회SQL문
+       </select>
+ 7. parameter속성      
+    - 생략가능                      
+         ----> 잇점:  파라미터 타입을 명시하지 않으면 VO또는 Map을 자유롭게 전달할 수 있음.
+    예)  <select id="select" resultClass="자료형" parameterClass="EmpVO">
+              조회SQL문
+         </select>    
+         ----> sqlMap.queryForObject("emp.select", new EmpVO());    실행성공
+         ----> sqlMap.queryForObject("emp.select", new HashMap());  실행실패
+         <select id="select" resultClass="자료형">
+              조회SQL문
+         </select>    
+         ----> sqlMap.queryForObject("emp.select", new EmpVO());    실행성공
+         ----> sqlMap.queryForObject("emp.select", new HashMap());  실행성공
+                 
+ 8. result속성    
+    - 생략시 null리턴   
+    예)  <select id="select">
+              조회SQL문
+      </select>           
+         ----> Object ob = sqlMap.queryForObject("emp.select");
+               System.out.println(ob); ----> null 출력
+               
+=======================================================================
+<<MyBatis>>
+-----------------------------------------------------------------------
+ 1. 호출객체      
+    - SqlSession                    ===> XML문서에 정의된 sql문 호출 가능!!
+    예)  SqlSession sqlSession;
+                      sqlSession.insert();
+ 2. DML호출
+    - insert(String id[, Object value])
+      delete(String id[, Object value])
+      update(String id[, Object value])
+ 3. DQL호출      
+    - selectOne(String id[, Object value])   : 조회결과가 한개 행일때
+    - selectList(String id[, Object value])     : 조회결과가 두개 이상의 행일때
+                      
+ 4. NameSpace     
+    - 필수
+      예)  <mapper></mapper>                        : 실행에러!!
+           <mapper namespace="emp"></mapper>     : 실행가능
+                    
+ 5. 파라미터처리       
+    - #{username}                    
+      예)  <select id="select" parameterType="String">
+              select userid from userTable
+              where username=#{username}
+           </select>
+ 6. 속성
+    - resultType, parameterType    
+      예) <select id="아이디" resultType="자료형" parameterType="자료형">
+              조회SQL문
+       </select>
+ 7. parameter속성      
+    - 생략가능                      
+         ----> 잇점:  파라미터 타입을 명시하지 않으면 VO또는 Map을 자유롭게 전달할 수 있음.
+    예)  <select id="select" resultType="자료형" parameterType="EmpVO">
+              조회SQL문
+         </select>    
+         ----> sqlMap.queryForObject("emp.select", new EmpVO());    실행성공
+         ----> sqlMap.queryForObject("emp.select", new HashMap());  실행실패
+         <select id="select" resultType="자료형">
+                   조회SQL문
+                   where  컬럼명=#{empno}
+                       ----> 전달데이터가 VO라면   out.print(vo.getEmpno()) 
+                       ----> 전달데이터가 Map이라면   out.print(map.get("empno")) 
+         </select>    
+         ----> sqlMap.queryForObject("emp.select", new EmpVO());    실행성공
+         ----> sqlMap.queryForObject("emp.select", new HashMap());  실행성공
+                 
+ 8. result속성    
+    - 생략시 에러발생   
+    예)  <select id="select">
+              조회SQL문
+      </select>           
+         ----> Object ob = sqlSession.selectOne("emp.select"); //에러발생!!
+               System.out.println(ob);
+
+
+
+=======================================================================
+<<Mybatis Mapper인터페이스>>
+-----------------------------------------------------------------------
+- Mybatis 3.0버전부터 지원
+- 매핑파일(예:product.xml)에 있는 sql을 인터페이스(예:ProductMapper)로 호출한다
+   ==> ProductMapper는 기존 ProductDAO 인터페이스와 같다.
+        ( ProductMapper == ProductDAO)
+        ▶▶ 보통 식별을 위해 ProductMapper패턴의 이름과 , com.ureca.product.mapper패키지 이름을 사용하는데
+        ▶▶ 참고소스에는 이전 파일들을 최대한 변경없이 사용하기 위해 ProductDAO, com.ureca.product.dao 이름을 그대로 유지하였음. 
+- 결론은 ProductDAOImpl클래스에 SqlSession주입을 통한 sql을 호출할 수 있다.
+   기존호출                             :   ProductServiceImpl   -----> ProductDAO  ----> ProductDAOImpl   ----> product.xml
+   Mapper인터페이스를 통한 호출 :   ProductServiceImpl   -----> ProductDAO  ---->  product.xml
+  
+<작성방법>
+1. product.xml의 루트엘리먼트의 namespace속성에 실제 패키지명과 인터페이스명을 명시
+   <mapper namespace="com.ureca.product.dao.ProductDAO">
+2. Mapper어노테이션사용 - Mapper인터페이스위에 @Mapper표시 (생략가능)
+   @Mapper
+   public interface ProductDAO { }
+3. 기존 com.ureca.product.dao패키지에 생성할 객체가 없으므로 주석처리
+   @Mypper와 매핑될 패키지를 스캔
+   <!-- <context:component-scan base-package="com.ureca.product.dao"/> -->
+   <mybatis:scan base-package="com.ureca.product.dao"/>
+4. 주의: DAO의 메소드명과 매퍼XML파일의 id값은 꼭 일치해야 함. 
+
      
      
      
